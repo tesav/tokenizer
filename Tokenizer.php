@@ -152,7 +152,7 @@ class Tokenizer {
 
         $char = $this->_char();
         if ($str = $this->_strTo($char))
-                return $this->_chars[$char][0] . ' ' . $str;
+                return $this->_chars[$char][0] . ' ' . $str . $char;
         return $this->_chars[$char][0] . ' ERROR ' . $this->_getAll();
     }
 
@@ -162,7 +162,7 @@ class Tokenizer {
      */
     protected function _comment() {
 
-        if ($this->_char() != '*') return 'COMMENT ' . $this->_strTo("\r");
+        if ($this->_char() != '*') return 'COMMENT ' . $this->_strTo("\n");
         $str = $this->_strTo('*/');
         return $str ? 'COMMENT ' . $str : 'COMMENT_ERROR ' . $this->_getAll();
     }
@@ -286,7 +286,7 @@ class Tokenizer {
 
             if (!is_array($this->_chars[$char])) {
                 $this->_res($this->_chars[$char]);
-                $char == "\r" and $this->_lineNum++;
+                $char == "\n" and $this->_lineNum++;
                 continue;
             }
 
