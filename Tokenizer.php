@@ -41,7 +41,9 @@ class Tokenizer {
         ' ' => 'WHITESPACE',
         ';' => 'CHARACTER ;',
         '$' => 'VARIABLE',
-        '*' => 'MULTIPLLI',
+        '*' => array('MULTIPLLI', array(
+                '*/' => 'COMMENT_ERROR',
+        )),
         '=' => array('ASSIGNMENT', array(
                 '===' => 'IDENTICALLY',
                 '==' => 'EQUAL',
@@ -150,7 +152,7 @@ class Tokenizer {
 
         $char = $this->_char();
         if ($str = $this->_strTo($char))
-                return $this->_chars[$char][0] . ' ' . $str . $char;
+                return $this->_chars[$char][0] . ' ' . $str;
         return $this->_chars[$char][0] . ' ERROR ' . $this->_getAll();
     }
 
@@ -162,7 +164,7 @@ class Tokenizer {
 
         if ($this->_char() != '*') return 'COMMENT ' . $this->_strTo("\r");
         $str = $this->_strTo('*/');
-        return $str ? 'COMMENT ' . $str . '*' : 'COMMENT ERROR ' . $this->_getAll();
+        return $str ? 'COMMENT ' . $str : 'COMMENT_ERROR ' . $this->_getAll();
     }
 
     /**
@@ -355,29 +357,22 @@ class Tokenizer {
      * Searches for a substring in a string
      * from the current position.
      *
-     * @staticvar string $string stores the substring.
      * @param string $str
      * @return string|bool false
      */
     private function _strToStr($str) {
 
-        static $string = '';
+        $len = strlen($str) - 1;
 
-        if (!$_str = $this->_strToChar($str{0})) {
+        if (!$_str = $this->_strToChar($str{$len})) return false;
 
-            $string = '';
-            return false;
-        }
+        $this->_charNum -= $len;
 
-        $string .= $_str;
-
-        if ($this->_is($str)) {
-
-            $_str = $string;
-            $string = '';
-
+        if ($this->_is(substr($str, 0, $len))) {
+            $this->_charNum += $len;
             return $_str;
         }
+        $this->_charNum += $len;
         return $this->_strToStr($str);
     }
 
