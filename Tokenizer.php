@@ -115,16 +115,16 @@ class Tokenizer {
         if ($this->_next('=')) {
             $this->_open = true;
             $this->_charNum++;
-            return 'OPEN_TAG &lt;? ECHO ';
+            return 'OPEN_TAG <? ECHO ';
         }
 
         if ($this->_is('?php') and $this->_next(array("\r", "\n", ' '))) {
             $this->_open = true;
-            return 'OPEN_TAG &lt;?php';
+            return 'OPEN_TAG <?php';
         }
 
         $this->_open = true;
-        return 'OPEN_TAG &lt;?';
+        return 'OPEN_TAG <?';
     }
 
     /**
@@ -135,7 +135,7 @@ class Tokenizer {
 
         if (!$this->_open) return 'ERROR CLOSE_TAG';
         $this->_open = false;
-        return 'CLOSE_TAG ?&gt;';
+        return 'CLOSE_TAG ?>';
     }
 
     /**
@@ -238,6 +238,7 @@ class Tokenizer {
      * @param string $str
      */
     protected function _res($str) {
+        $str = htmlspecialchars($str);
         $this->inLine ?
                         $this->result[$this->_lineNum] .= $str . ' ' :
                         $this->result[] .= $str . ' ';
