@@ -118,18 +118,13 @@ class Tokenizer {
             return 'OPEN_TAG &lt;? ECHO ';
         }
 
-        $_chars = array("\r", "\n", ' ');
-
-        if ($this->_next($_chars)) {
-            $this->_open = true;
-            return 'OPEN_TAG &lt;?';
-        }
-
-        if ($this->_is('?php') and $this->_next($_chars)) {
+        if ($this->_is('?php') and $this->_next(array("\r", "\n", ' '))) {
             $this->_open = true;
             return 'OPEN_TAG &lt;?php';
         }
-        return 'ERROR OPEN_TAG';
+
+        $this->_open = true;
+        return 'OPEN_TAG &lt;?';
     }
 
     /**
