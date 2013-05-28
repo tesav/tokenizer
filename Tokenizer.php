@@ -157,9 +157,9 @@ class Tokenizer {
      */
     protected function _comment() {
 
-        if ($this->_char() != '*') return 'COMMENT ' . $this->_strTo("\n");
+        if ($this->_char() != '*') return 'COMMENT //' . $this->_strTo("\n");
         $str = $this->_strTo('*/');
-        return $str ? 'COMMENT ' . $str : 'COMMENT_ERROR ' . $this->_getAll();
+        return $str ? "COMMENT /{$str}/" : 'COMMENT_ERROR ' . $this->_getAll();
     }
 
     /**
