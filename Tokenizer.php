@@ -274,7 +274,7 @@ class Tokenizer {
             }
 
             if ($str) {
-                $this->_res(strtoupper($str)/* . ' ' . $str */);
+                $this->_res(strtoupper($str) /* . ' ' . $str */);
                 $str = '';
             }
 
