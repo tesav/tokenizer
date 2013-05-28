@@ -239,7 +239,7 @@ class Tokenizer {
      * @param string $str
      */
     protected function _res($str) {
-        $str = htmlspecialchars($str);
+        $str = htmlspecialchars((string) $str);
         $this->inLine ?
                         $this->result[$this->_lineNum] .= $str . ' ' :
                         $this->result[] .= $str . ' ';
@@ -364,7 +364,7 @@ class Tokenizer {
 
         $this->_charNum -= $len;
 
-        if ($this->_is(substr($str, 0, $len))) {
+        if ($this->_is($str)) {
             $this->_charNum += $len;
             return $_str;
         }
