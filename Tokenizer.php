@@ -36,10 +36,11 @@ class Tokenizer {
      * @var array an array of characters.
      */
     protected $_chars = array(
+        "\r" => '\r',
+        "\n" => '\n',
         ' ' => 'WHITESPACE',
         ';' => 'CHARACTER ;',
         '$' => 'VARIABLE',
-        "\r" => '\r',
         '*' => array('MULTIPLLI', array(
                 '*/' => 'COMMENT_ERROR',
         )),
@@ -277,14 +278,10 @@ class Tokenizer {
                 $str = '';
             }
 
-            if ($char == "\n") {
-                $this->_res('\n');
-                $this->_lineNum++;
-            }
-
             if (empty($this->_chars[$char])) continue;
 
             if (!is_array($this->_chars[$char])) {
+                $char == "\n" and $this->_lineNum++;
                 $this->_res($this->_chars[$char]);
                 continue;
             }
