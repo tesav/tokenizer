@@ -281,8 +281,8 @@ class Tokenizer {
             if (empty($this->_chars[$char])) continue;
 
             if (!is_array($this->_chars[$char])) {
-                $char == "\n" and $this->_lineNum++;
                 $this->_res($this->_chars[$char]);
+                $char == "\n" and $this->_lineNum++;
                 continue;
             }
 
