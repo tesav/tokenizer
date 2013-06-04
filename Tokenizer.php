@@ -161,9 +161,10 @@ class Tokenizer {
      */
     protected function _comment() {
 
-        if ($this->_char() != '*') return 'COMMENT //' . $this->_strTo("\n");
+        if ($this->_char() != '*')
+                return 'COMMENT /' . ($this->_strTo("\n")? : $this->_getAll());
         $str = $this->_strTo('*/');
-        return $str ? "COMMENT /{$str}/" : 'COMMENT_ERROR ' . $this->_getAll();
+        return $str ? "COMMENT /{$str}*/" : 'COMMENT_ERROR ' . $this->_getAll();
     }
 
     /**
@@ -357,22 +358,29 @@ class Tokenizer {
      * Searches for a substring in a string
      * from the current position.
      *
+     * @staticvar string $string stores the substring.
      * @param string $str
      * @return string|bool false
      */
     private function _strToStr($str) {
 
-        $len = strlen($str) - 1;
+        static $string = '';
 
-        if (!$_str = $this->_strToChar($str{$len})) return false;
+        if (!$_str = $this->_strToChar($str{0})) {
 
-        $this->_charNum -= $len;
+            $string = '';
+            return false;
+        }
+
+        $string .= $_str;
 
         if ($this->_is($str)) {
-            $this->_charNum += $len;
+
+            $_str = $string;
+            $string = '';
+
             return $_str;
         }
-        $this->_charNum += $len;
         return $this->_strToStr($str);
     }
 
