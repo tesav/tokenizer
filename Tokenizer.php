@@ -119,13 +119,17 @@ class Tokenizer {
             return 'OPEN_TAG <? ECHO ';
         }
 
-        if ($this->_is('?php') and $this->_next(array("\r", "\n", ' '))) {
+        if (!$this->_is('?php')) {
+            $this->_open = true;
+            return 'OPEN_TAG <?';
+        }
+
+        if ($this->_next(array("\r", "\n", ' '))) {
             $this->_open = true;
             return 'OPEN_TAG <?php';
         }
 
-        $this->_open = true;
-        return 'OPEN_TAG <?';
+        return 'ERROR OPEN_TAG <?php';
     }
 
     /**
